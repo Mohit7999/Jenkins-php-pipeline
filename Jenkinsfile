@@ -42,6 +42,8 @@ pipeline {
                 if [ ! -f .env ]; then
                     cp .env.example .env
                 fi
+
+                touch database/database.sqlite
                 '''
             }
         }
@@ -62,7 +64,6 @@ pipeline {
 
                 sh '''
                 php artisan config:clear
-                php artisan cache:clear
                 php artisan route:clear
                 php artisan view:clear
 
