@@ -43,6 +43,7 @@ pipeline {
                     cp .env.example .env
                 fi
 
+                mkdir -p database
                 touch database/database.sqlite
                 '''
             }
@@ -67,6 +68,8 @@ pipeline {
                 php artisan route:clear
                 php artisan view:clear
 
+                php artisan optimize:clear
+
                 php artisan config:cache
                 php artisan route:cache
                 php artisan view:cache
@@ -80,7 +83,10 @@ pipeline {
             steps {
 
                 sh '''
-                rsync -av --delete \
+                rsync -avz --delete \
+                --no-owner \
+                --no-group \
+                --no-perms \
                 --exclude='.git' \
                 --exclude='node_modules' \
                 ./ $DEPLOY_PATH
